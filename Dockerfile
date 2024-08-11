@@ -5,14 +5,13 @@ FROM openjdk:21-jdk-slim
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
 
-# Install necessary packages and download the latest version of Apache Tomcat
+# Install necessary packages and download Tomcat
 RUN apt-get update && \
-    apt-get install -y wget curl && \
-    LATEST_TOMCAT=$(curl -s https://tomcat.apache.org/download-90.cgi | grep -oP '(?<=v)[0-9.]+(?=/bin)') && \
-    wget https://dlcdn.apache.org/tomcat/tomcat-9/v$LATEST_TOMCAT/bin/apache-tomcat-$LATEST_TOMCAT.tar.gz && \
-    tar xzvf apache-tomcat-$LATEST_TOMCAT.tar.gz && \
-    mv apache-tomcat-$LATEST_TOMCAT /usr/local/tomcat && \
-    rm apache-tomcat-$LATEST_TOMCAT.tar.gz
+    apt-get install -y wget && \
+    wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz && \
+    tar xzvf apache-tomcat-9.0.93.tar.gz && \
+    mv apache-tomcat-9.0.93 /usr/local/tomcat && \
+    rm apache-tomcat-9.0.93.tar.gz
 
 # Expose the default Tomcat port
 EXPOSE 8080
