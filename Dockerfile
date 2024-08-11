@@ -3,17 +3,17 @@ FROM openjdk:21-jdk-slim
 # Install necessary packages and Tomcat
 RUN apt-get update && \
     apt-get install -y wget curl && \
-    wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.81/bin/apache-tomcat-9.0.81.tar.gz && \
-    tar xzvf apache-tomcat-9.0.81.tar.gz && \
-    mv apache-tomcat-9.0.81 /usr/local/tomcat && \
-    rm apache-tomcat-9.0.81.tar.gz
+    wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz && \
+    tar xzvf apache-tomcat-9.0.80.tar.gz && \
+    mv apache-tomcat-9.0.80 /usr/local/tomcat && \
+    rm apache-tomcat-9.0.80.tar.gz
 
-# Expose the port
+# Set the working directory
+WORKDIR /usr/local/tomcat
+
+# Expose Tomcat port
 EXPOSE 8080
 
-# Copy the WAR file to the Tomcat webapps directory
-COPY target/*.war /usr/local/tomcat/webapps/
-
 # Start Tomcat
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD ["bin/catalina.sh", "run"]
 
