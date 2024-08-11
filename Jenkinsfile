@@ -32,17 +32,17 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                // Build the Docker image
                 script {
-                    docker.build(DOCKER_IMAGE)
+                    def app = docker.build(DOCKER_IMAGE, '.')
                 }
             }
         }
         stage('Deploy to Docker') {
             steps {
                 script {
-                    // Run the Docker container
-                    sh 'docker run -d -p 8080:8080 --name calculator-app ' + DOCKER_IMAGE
+                    docker.image(DOCKER_IMAGE).inside {
+                        sh 'docker run -d -p 8080:8080 --name calculator-app ' + DOCKER_IMAGE
+                    }
                 }
             }
         }
