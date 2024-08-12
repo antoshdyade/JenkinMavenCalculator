@@ -41,7 +41,7 @@ pipeline {
             steps {
                 script {
                     docker.image(DOCKER_IMAGE).inside {
-                        sh 'docker run -d -p 8080:8080 --name calculator-app ' + DOCKER_IMAGE
+                        sh 'docker run -d -p 8081:8081 --name calculator-app ' + DOCKER_IMAGE
                     }
                 }
             }
