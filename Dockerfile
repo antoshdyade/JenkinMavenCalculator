@@ -14,7 +14,7 @@ RUN apt-get update && \
     rm apache-tomcat-9.0.93.tar.gz
 
 # Expose the default Tomcat port
-EXPOSE 8081
+EXPOSE 8080
 
 # Set the default command to run Tomcat
 CMD ["catalina.sh", "run"]
