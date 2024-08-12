@@ -1,64 +1,37 @@
 pipeline {
     agent any
-
-    environment {
-        DOCKER_IMAGE = "calculator-app:latest"
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout the code from GitHub repository
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
-                // Compile the code
-                sh 'mvn clean compile'
-            }
-        }
-        stage('Test') {
-            steps {
-                // Run unit tests
-                sh 'mvn test'
-            }
-        }
-        stage('Package') {
-            steps {
-                // Package the application as a WAR file
-                sh 'mvn package'
+                // Add your build steps here
+                sh 'mvn clean package'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    def app = docker.build(DOCKER_IMAGE, '.')
+                    // Build the Docker image
+                    sh 'docker build -t calculator-app:latest .'
                 }
             }
         }
         stage('Deploy to Docker') {
             steps {
                 script {
-                    docker.image(DOCKER_IMAGE).inside {
-                        sh 'docker run -d -p 8080:8080 --name calculator-app ' + DOCKER_IMAGE
-                    }
+                    // Run the Docker container on a different port (8081)
+                    sh '''
+                        docker stop calculator-app || true
+                        docker rm calculator-app || true
+                        docker run -d -p 8081:8080 --name calculator-app calculator-app:latest
+                    '''
                 }
             }
         }
     }
-
     post {
         always {
-            // Publish JUnit test results
-            junit '**/target/surefire-reports/*.xml'
-        }
-        success {
-            echo 'Build, Test, and Deployment Successful!'
-        }
-        failure {
+            junit 'target/surefire-reports/*.xml'
             echo 'Build, Test, or Deployment Failed.'
         }
     }
 }
-
