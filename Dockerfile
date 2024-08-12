@@ -1,21 +1,14 @@
-# Use OpenJDK 21 as the base image
+# Use an official OpenJDK runtime as a parent image
 FROM openjdk:21-jdk-slim
 
-# Set environment variables for Tomcat
-ENV CATALINA_HOME /usr/local/tomcat
-ENV PATH $CATALINA_HOME/bin:$PATH
+# Set the working directory in the container
+WORKDIR /app
 
-# Install necessary packages and download Tomcat
-RUN apt-get update && \
-    apt-get install -y wget && \
-    wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz && \
-    tar xzvf apache-tomcat-9.0.93.tar.gz && \
-    mv apache-tomcat-9.0.93 /usr/local/tomcat && \
-    rm apache-tomcat-9.0.93.tar.gz
+# Copy the jar file from the host to the container
+COPY target/calculator-app.jar /app/calculator-app.jar
 
-# Expose the default Tomcat port
+# Expose port 8080 (this remains the internal container port)
 EXPOSE 8080
 
-# Set the default command to run Tomcat
-CMD ["catalina.sh", "run"]
-
+# Run the jar file
+CMD ["java", "-jar", "calculator-app.jar"]
