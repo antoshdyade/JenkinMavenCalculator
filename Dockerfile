@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y wget curl && \
     rm apache-tomcat-9.0.93.tar.gz
 
 # Copy the WAR file to Tomcat's webapps directory
-COPY target/your-app.war /usr/local/tomcat/webapps/ROOT.war
+COPY target/CalculatorApp.war /usr/local/tomcat/webapps/ROOT.war
 
 # Expose port 8080
 EXPOSE 8080
